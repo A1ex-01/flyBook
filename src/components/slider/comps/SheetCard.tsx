@@ -13,7 +13,7 @@ const SheetCard = memo((props: { actived: boolean; sheetName: string; setTabInde
 				boxSizing: "border-box"
 			}}
 		>
-			<i className="iconfont icon-Star"></i>
+			<i className="iconfont icon-Star mr-2"></i>
 			<span>{sheetName}</span>
 		</div>
 	)

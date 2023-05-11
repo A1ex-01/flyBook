@@ -79,7 +79,6 @@ const sheetSlice = createSlice({
 		createSheet(state, action: PayloadAction<{ name: string }>) {
 			// state["123-321"] = action.payload.sheet
 			// 构建一个表
-			console.log(state)
 			const sheetCount = Object.keys(state).length
 			const sheet = sheetTemplateCreator(action.payload.name || `数据表${sheetCount + 1}`)
 			state[sheet.id] = sheet
@@ -87,10 +86,7 @@ const sheetSlice = createSlice({
 		deleteSheet() {
 			console.log(1)
 		},
-		updateSheetRow(
-			state,
-			action: PayloadAction<{ sheetId: string; rowId: string; columnId: string; newValue: string }>
-		) {
+		updateSheetRow(state, action: PayloadAction<{ sheetId: string; rowId: string; columnId: string; newValue: string }>) {
 			const { sheetId, rowId, columnId, newValue } = action.payload
 			const sheet = state[sheetId]
 			if (sheet) {

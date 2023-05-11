@@ -71,14 +71,7 @@ function SliderBox(props: IProps) {
 						}}
 					/>
 				))}
-				{addAble && (
-					<Input
-						className="my-3"
-						placeholder={`数据表${sheetArr.length + 1}`}
-						ref={inputRef}
-						onBlur={requestCreateSheet}
-					/>
-				)}
+				{addAble && <Input className="my-3" placeholder={`数据表${sheetArr.length + 1}`} ref={inputRef} onBlur={requestCreateSheet} />}
 			</div>
 			{/* 新建 */}
 			<div
