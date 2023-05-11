@@ -5,6 +5,8 @@ import { useThemeWorker } from "@/hooks/useThemeWorker"
 import { useLangWorker } from "@/hooks/useLangWorker"
 import { useMySelect } from "@/store"
 import { useTranslation } from "react-i18next"
+import { IconSquareLetterL } from "@tabler/icons-react"
+
 export const ThemeModel = () => {
 	const { theme, changeTheme } = useThemeWorker()
 	const { t } = useTranslation()
@@ -12,15 +14,16 @@ export const ThemeModel = () => {
 		<div className="w-28 text-base">
 			<Button type="text" className="w-full text-left" onClick={() => changeTheme("light")}>
 				{t("浅色")}
-				{theme === "light" && "√"}
+				{theme === "light" && "♥"}
 			</Button>
 			<Button type="text" className="w-full text-left" onClick={() => changeTheme("dark")}>
 				{t("暗色")}
-				{theme === "dark" && "√"}
+				{theme === "dark" && "♥"}
 			</Button>
 		</div>
 	)
 }
+
 export const LangModel = () => {
 	const { lang, changeLang } = useLangWorker()
 	const { t } = useTranslation()
@@ -28,15 +31,16 @@ export const LangModel = () => {
 		<div className="w-28 text-base">
 			<Button type="text" className="w-full text-left" onClick={() => changeLang("zh")}>
 				{t("中文")}
-				{lang === "zh" && "√"}
+				{lang === "zh" && "♥"}
 			</Button>
 			<Button type="text" className="w-full text-left" onClick={() => changeLang("en")}>
 				{t("英文")}
-				{lang === "en" && "√"}
+				{lang === "en" && "♥"}
 			</Button>
 		</div>
 	)
 }
+
 function ProfileTabs() {
 	const { theme } = useMySelect((state) => {
 		return {

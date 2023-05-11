@@ -12,7 +12,7 @@ function Left() {
 					<i className="iconfont icon-Star ml-2 ant-btn"></i>
 				</div>
 				<div className="tag text-gray-700" style={{ color: "#817d7b" }}>
-					<Button type="text" icon={<i className="iconfont icon-wenjianjia ant-btn"></i>} />
+					<Button type="text" color="#ff8800" icon={<i className="iconfont icon-wenjianjia ant-btn"></i>} />
 					<span>我的空间 | 最近修改：20分钟前</span>
 				</div>
 			</div>

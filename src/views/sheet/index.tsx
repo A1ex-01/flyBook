@@ -3,7 +3,6 @@ import { Button, Input } from "antd"
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import { toolTabs } from "./toolTabs"
-import classNames from "classnames"
 
 import { Stage, Layer, Star, Text, Rect, Group } from "react-konva"
 import { KonvaEventObject } from "konva/lib/Node"
@@ -179,7 +178,7 @@ const Sheet = memo(() => {
 						{editInputType === "TEXT" && (
 							<Input
 								style={{ height: "30px", width: "180px" }}
-								className="w-full h-full"
+								className="w-full h-full z-10"
 								size="small"
 								onBlur={() => {
 									setEditInputType(null)
