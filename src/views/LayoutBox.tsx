@@ -31,7 +31,7 @@ const siderStyle: React.CSSProperties = {
 	width: 235,
 	height: "calc(100vh - 64px)",
 	borderRight: "1px solid #ccc",
-	transition: "transform .5s"
+	transition: "marginLeft .5s"
 }
 function LayoutBox() {
 	const { theme, lang } = useMySelect((state) => {
@@ -68,7 +68,7 @@ function LayoutBox() {
 					<HeaderBox />
 				</div>
 				<Layout className="flex-row">
-					<div style={{ ...siderStyle, transform: `translateX(${isFold ? "-100%" : "0"})` }}>
+					<div style={{ ...siderStyle, marginLeft: `${isFold ? "-235px" : "0px"}`, flexShrink: 0 }}>
 						<SliderBox changeIsFold={() => changeIsFold()} isFold={isFold} />
 					</div>
 					<Content style={contentStyle}>{useRoutes(routes)}</Content>

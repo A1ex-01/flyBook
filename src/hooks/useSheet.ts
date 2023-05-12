@@ -25,25 +25,17 @@ export default () => {
 		},
 		[sheets]
 	)
-	const createSheetDispatcher = useCallback(
-		(name: string = "") => {
-			dispatch(createSheet({ name }))
-		},
-		[sheets]
-	)
+	const createSheetDispatcher = useCallback((name: string = "") => dispatch(createSheet({ name })), [sheets])
 
 	const getRowInfo = useCallback(
-		(sheetId: string, viewId?: string, rowId?: string) => {
+		(sheetId: string) => {
 			const targetRow = sheets[sheetId].rows
-			console.log("tagetRow", targetRow)
 			return Object.values(targetRow)
 		},
 		[sheets]
 	)
 	const updateSheetRows = useCallback(
 		(sheetId: string, rowId: string, columnId: string, newValue: string = "") => {
-			console.log(sheetId, rowId, columnId, newValue)
-			// const targertRow = sheets[sheetId].rows
 			dispatch(updateSheetRow({ sheetId, rowId, columnId, newValue }))
 		},
 		[sheets]
