@@ -1,4 +1,4 @@
-import { IconTable, IconDotsVertical, IconPlus } from "@tabler/icons-react"
+import { IconTable, IconDotsVertical, IconPlus, IconListNumbers } from "@tabler/icons-react"
 import { Button, Input } from "antd"
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -11,33 +11,29 @@ import { Html } from "react-konva-utils"
 import useSheet from "@/hooks/useSheet"
 const Sheet = memo(() => {
 	const { sheetId, viewId } = useParams<{ sheetId: string; viewId: string }>()
+
+	// 绘制canvas画布
 	const canvasContainer = useRef<HTMLDivElement>(null)
 	const [canvasSize, setCanvasSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
+	useLayoutEffect(() => {
+		setCanvasSize({ width: canvasContainer.current!.offsetWidth, height: canvasContainer.current!.offsetHeight })
+	}, [canvasContainer])
+
+	const [currRowId, setCurrRowId] = useState<string | null>(null)
+	const [currColId, setCurrColId] = useState<string | null>(null)
+
+	// 编辑行
 	const editInputRef = useRef<HTMLDivElement>(null)
 	const [editInputValue, setEditInputValue] = useState<string>("")
 	const [editInputType, setEditInputType] = useState<keyof ColumnMap | null>(null)
-
-	useLayoutEffect(() => {
-		console.log(canvasContainer.current?.offsetHeight)
-		setCanvasSize({ width: canvasContainer.current!.offsetWidth, height: canvasContainer.current!.offsetHeight })
-	}, [canvasContainer])
-	const [currRowId, setCurrRowId] = useState<string | null>(null)
-	const [currColId, setCurrColId] = useState<string | null>(null)
 	const editTableCell = useCallback(
-		(
-			event: KonvaEventObject<MouseEvent>,
-			columnType: keyof ColumnMap,
-			width: number,
-			rowId: string,
-			colId: string,
-			value: string
-		) => {
-			console.log(width)
+		(event: KonvaEventObject<MouseEvent>, columnType: keyof ColumnMap, width: number, rowId: string, colId: string, value: string) => {
 			const { x, y } = event.target.attrs
 			setEditInputType(columnType)
+			// 保存行id
 			setCurrRowId(rowId)
 			setCurrColId(colId)
-			// 保存行id
+			// 设置input框位置
 			requestIdleCallback(() => {
 				editInputRef.current!.style.left = x + "px"
 				editInputRef.current!.style.top = y + "px"
@@ -48,6 +44,8 @@ const Sheet = memo(() => {
 		},
 		[]
 	)
+
+	// 编辑列
 	const { getViewColumns, getRowInfo, updateSheetRows } = useSheet()
 	const columnHeaderWidth = useMemo(() => {
 		const { columnArrConfig } = getViewColumns(sheetId!, viewId!)
@@ -55,11 +53,13 @@ const Sheet = memo(() => {
 			return pre + cur.width
 		}, 0)
 	}, [sheetId, viewId, getViewColumns])
+
 	const columnArrList = useMemo(() => {
 		const { columnArr, columnsConfig, columnArrConfig, columns } = getViewColumns(sheetId!, viewId!)
 		return { columnArr, columnsConfig, columnArrConfig, columns }
 	}, [sheetId, viewId, getViewColumns])
 
+	// 通过索引拿到对应总宽
 	const getXByIndex = useCallback(
 		(index: number) => {
 			return columnArrList.columnArrConfig.reduce((pre, cur, i) => {
@@ -93,10 +93,7 @@ const Sheet = memo(() => {
 							<div key={index} className="flex items-center">
 								<div key={index} className="flex">
 									{parentTab.map((tab) => (
-										<div
-											key={tab.id}
-											className="px-2 rounded-md flex items-center mr-2 gap-2 cursor-pointer hover:bg-gray-100"
-										>
+										<div key={tab.id} className="py-1 px-2 rounded-md flex items-center mr-2 gap-2 cursor-pointer hover:bg-gray-100">
 											{tab.icon}
 											{tab.name}
 										</div>
@@ -127,7 +124,7 @@ const Sheet = memo(() => {
 												style={{ width: columnArrList.columnsConfig[column.id].width, borderColor: "#ddd" }}
 												className="flex items-center border border-solid h-9 px-2"
 											>
-												<IconTable size={16} className="mr-2" />
+												<IconListNumbers size={16} className="mr-2" />
 												{column.name}
 											</div>
 										)
@@ -149,12 +146,9 @@ const Sheet = memo(() => {
 													event,
 													columnArrList.columns[column.id].columnType,
 													columnArrList.columnsConfig[column.id].width,
-													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)
-														?.id as string,
+													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.id as string,
 													column.id as string,
-													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[
-														column.id
-													] as string
+													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[column.id] as string
 												)
 											}
 										/>
@@ -163,11 +157,7 @@ const Sheet = memo(() => {
 											y={32}
 											padding={10}
 											fontSize={14}
-											text={
-												getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[
-													column.id
-												] as string
-											}
+											text={getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[column.id] as string}
 										/>
 									</Group>
 								)
@@ -178,7 +168,7 @@ const Sheet = memo(() => {
 						{editInputType === "TEXT" && (
 							<Input
 								style={{ height: "30px", width: "180px" }}
-								className="w-full h-full z-10"
+								className="w-full h-full relative z-10"
 								size="small"
 								onBlur={() => {
 									setEditInputType(null)
