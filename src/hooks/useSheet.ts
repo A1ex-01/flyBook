@@ -11,6 +11,9 @@ export default () => {
 	const getSheet = useCallback((sheetId: string) => sheets[sheetId], [sheets])
 	const getView = useCallback((sheetId: string, viewId: string) => sheets[sheetId].views[viewId], [sheets])
 	const getViewArr = useCallback((sheetId: string) => Object.values(sheets[sheetId].views), [sheets])
+	const getRows = useCallback((sheetId: string) => sheets[sheetId].rows, [sheets])
+	const getRowsArr = useCallback((sheetId: string) => Object.values(sheets[sheetId].rows), [sheets])
+
 	const getViewColumns = useCallback(
 		(sheetId: string, viewId: string) => {
 			const targetSheet = sheets[sheetId]
@@ -49,6 +52,8 @@ export default () => {
 		sheetArr,
 		getSheet,
 		getView,
+		getRows,
+		getRowsArr,
 		createSheetDispatcher,
 		getViewArr,
 		getViewColumns,

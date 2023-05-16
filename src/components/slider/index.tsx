@@ -70,7 +70,7 @@ function SliderBox(props: IProps) {
 			{/* 新建 */}
 			<div
 				style={{ borderTop: "1px solid #ccc", width: "calc(100% - 16px)" }}
-				className="flex flex-col items-start absolute bottom-0 py-4 border-t-2"
+				className="flex flex-col items-start py-4 border-t-2"
 			>
 				<span className="text-sm" style={{ color: "#666" }}>
 					新建

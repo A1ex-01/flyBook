@@ -80,7 +80,6 @@ const sheetSlice = createSlice({
 	initialState: state,
 	reducers: {
 		createSheet(state, action: PayloadAction<{ name: string }>) {
-			// state["123-321"] = action.payload.sheet
 			// 构建一个表
 			const sheetCount = Object.keys(state).length
 			const sheet = sheetTemplateCreator(action.payload.name || `数据表${sheetCount + 1}`)

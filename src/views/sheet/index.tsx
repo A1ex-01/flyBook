@@ -28,6 +28,7 @@ const Sheet = memo(() => {
 	const [editInputType, setEditInputType] = useState<keyof ColumnMap | null>(null)
 	const editTableCell = useCallback(
 		(event: KonvaEventObject<MouseEvent>, columnType: keyof ColumnMap, width: number, rowId: string, colId: string, value: string) => {
+			console.log(value)
 			const { x, y } = event.target.attrs
 			setEditInputType(columnType)
 			// 保存行id
@@ -46,12 +47,16 @@ const Sheet = memo(() => {
 	)
 
 	// 编辑列
-	const { getViewColumns, getRowInfo, updateSheetRows } = useSheet()
+	const { getViewColumns, getRowInfo, updateSheetRows, getRowsArr } = useSheet()
 	const columnHeaderWidth = useMemo(() => {
 		const { columnArrConfig } = getViewColumns(sheetId!, viewId!)
 		return columnArrConfig.reduce((pre, cur) => {
 			return pre + cur.width
 		}, 0)
+	}, [sheetId, viewId, getViewColumns])
+
+	const columnTableHeight = useMemo(() => {
+		return getRowsArr(sheetId!).length * 30
 	}, [sheetId, viewId, getViewColumns])
 
 	const columnArrList = useMemo(() => {
@@ -131,37 +136,47 @@ const Sheet = memo(() => {
 									})}
 								</div>
 							</Html>
-							{columnArrList.columnArr.map((column, index) => {
-								return (
-									<Group key={column.id}>
-										<Rect
-											x={0 + getXByIndex(index)}
-											y={32}
-											width={columnArrList.columnsConfig[column.id].width}
-											height={30}
-											strokeWidth={1}
-											stroke={"#ddd"}
-											onDblClick={(event) =>
-												editTableCell(
-													event,
-													columnArrList.columns[column.id].columnType,
-													columnArrList.columnsConfig[column.id].width,
-													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.id as string,
-													column.id as string,
-													getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[column.id] as string
-												)
-											}
-										/>
-										<Text
-											x={0 + getXByIndex(index)}
-											y={32}
-											padding={10}
-											fontSize={14}
-											text={getRowInfo(sheetId as string)?.find((rowObj) => rowObj[column.id] !== undefined)?.[column.id] as string}
-										/>
-									</Group>
-								)
+							{getRowsArr(sheetId!).map((rowItem, index) => {
+								return Object.keys(getViewColumns(sheetId!, viewId!).columnsConfig).map((columnId, i) => {
+									return (
+										<Group key={rowItem + columnId}>
+											<Rect
+												x={0 + getXByIndex(i)}
+												y={(index + 1) * 30}
+												width={columnArrList.columnsConfig[columnId].width}
+												height={30}
+												strokeWidth={1}
+												stroke={"#ddd"}
+												onDblClick={(event) =>
+													editTableCell(
+														event,
+														columnArrList.columns[columnId].columnType,
+														columnArrList.columnsConfig[columnId].width,
+														getRowInfo(sheetId as string)?.find((rowObj) => rowObj[columnId] !== undefined)?.id as string,
+														columnId as string,
+														getRowInfo(sheetId as string)?.find((rowObj) => rowObj[columnId] !== undefined)?.[columnId] as string
+													)
+												}
+											/>
+											<Text
+												x={0 + getXByIndex(i)}
+												y={(index + 1) * 30}
+												padding={10}
+												fontSize={14}
+												text={getRowInfo(sheetId as string).find((rowObj) => rowObj.id === rowItem.id)?.[columnId] as string}
+											/>
+										</Group>
+									)
+								})
 							})}
+							<Html>
+								<div
+									style={{ width: columnHeaderWidth, height: "30px", marginTop: columnTableHeight + 30 + "px" }}
+									className="flex items-center"
+								>
+									<IconPlus />
+								</div>
+							</Html>
 						</Layer>
 					</Stage>
 					<div className="faster-overlay absolute" ref={editInputRef}>
