@@ -1,6 +1,7 @@
 import { useMySelect } from "@/store"
-import { createSheet, updateSheetRow } from "@/store/modules/sheetsSlice"
-import { useCallback, useMemo } from "react"
+import { createSheet, renameSheet, updateSheetRow } from "@/store/modules/sheetsSlice"
+import { MessageInstance } from "antd/es/message/interface"
+import { Key, useCallback, useMemo } from "react"
 import { useDispatch } from "react-redux"
 
 export default () => {
@@ -40,6 +41,9 @@ export default () => {
 		},
 		[sheets]
 	)
+	const updateSheetNameBySheetId = useCallback((sheetId:string, newValue:string) => {
+		dispatch(renameSheet( {sheetId, newValue } ))
+	}, [sheets])
 	return {
 		sheets,
 		sheetArr,
@@ -49,6 +53,7 @@ export default () => {
 		getViewArr,
 		getViewColumns,
 		getRowInfo,
-		updateSheetRows
+		updateSheetRows,
+		updateSheetNameBySheetId
 	}
 }

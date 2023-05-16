@@ -57,6 +57,7 @@ function SliderBox(props: IProps) {
 					<SheetCard
 						actived={tabIndex === index}
 						sheetName={sheet.name}
+						sheetId={sheet.id as string}
 						key={sheet.id}
 						setTabIndex={() => {
 							setTabIndex(index)

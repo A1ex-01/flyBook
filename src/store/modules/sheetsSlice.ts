@@ -1,8 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { Sheet } from "./sheetTypes"
 import { sheetTemplateCreator } from "@/utils/sheethelper"
+import { MessageInstance } from "antd/es/message/interface"
+// import { message } from "antd"
+import {message} from "@/common/WithAntd"
 // import { SheetOperator } from "@/components/operations/SheetOperator"
-
+// const {message} = App.useApp()
 const state: {
 	[sheetId: string]: Sheet
 } = {
@@ -82,6 +85,7 @@ const sheetSlice = createSlice({
 			const sheetCount = Object.keys(state).length
 			const sheet = sheetTemplateCreator(action.payload.name || `数据表${sheetCount + 1}`)
 			state[sheet.id] = sheet
+			message!.success(`创建表成功,表名为${action.payload.name}`)
 		},
 		deleteSheet() {
 			console.log(1)
@@ -91,10 +95,16 @@ const sheetSlice = createSlice({
 			const sheet = state[sheetId]
 			if (sheet) {
 				state[sheetId].rows[rowId][columnId] = newValue
+				message!.success(`更新单元格成功,内容更新为${newValue}`)
 			}
 		},
-		renameSheet() {
-			console.log(2)
+		renameSheet(state, action: PayloadAction<{ sheetId: string; newValue: string }>) {
+			const { sheetId, newValue } = action.payload
+			const sheet = state[sheetId]
+			if (sheet) {
+				state[sheetId].name = newValue
+				message!.success(`重命名成功,表名更新为${newValue}`)
+			}
 		}
 	}
 })

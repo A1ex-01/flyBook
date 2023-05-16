@@ -31,7 +31,7 @@ const siderStyle: React.CSSProperties = {
 	width: 235,
 	height: "calc(100vh - 64px)",
 	borderRight: "1px solid #ccc",
-	transition: "marginLeft .5s"
+	transition: "all .5s"
 }
 function LayoutBox() {
 	const { theme, lang } = useMySelect((state) => {
