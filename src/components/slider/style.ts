@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const WrapperBox = styled.div`
+const WrapperBox: any = styled.div`
   display: flex;
 	flex-direction: column;
 	.actived {
